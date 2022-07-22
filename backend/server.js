@@ -16,23 +16,16 @@ app.use(express.json());
 app.use(Cors());
 
 //routing
-// const productRouter = require("./src/routes/product.js");
 const userRouter = require("./src/routes/user.js");
-// const categoryRouter = require("./src/routes/category.js");
-// const cartRouter = require("./src/routes/cart.js");
-// const orderRouter = require("./src/routes/order.js");
-// app.use("/api", productRouter);
+const boardRouter = require("./src/routes/board.js");
 app.use("/api", userRouter);
-// app.use("/api/", categoryRouter);
-// app.use("/api/", cartRouter);
-// app.use("/api/", orderRouter);
+app.use("/api", boardRouter);
+
 //Db config
 mongoose
   .connect(process.env.ATLAS_URI, {
     useNewUrlParser: true,
-    // useCreateIndex: true,
     useUnifiedTopology: true,
-    // useFindAndModify: false,
   })
   .then(() => {
     console.log("MONGO DB connected");
@@ -46,26 +39,6 @@ app.get("/", (req, res) => {
   res.status(200).send("srum-poker express server is working fine.");
 });
 
-// app.post("/amazon/", (req, res) => {
-//   const dbCard = req.body;
-//   //   Cards.create(dbCard, (err, data) => {
-//   //     if (err) {
-//   //       res.status(500).send(err);
-//   //     } else {
-//   //       res.status(201).send(data);
-//   //     }
-//   //   });
-// });
-
-// app.get("/tinder/cards", (req, res) => {
-//   //   Cards.find((err, data) => {
-//   //     if (err) {
-//   //       res.status(500).send(err);
-//   //     } else {
-//   //       res.status(200).send(data);
-//   //     }
-//   //   });
-// });
 //Listener
 app.listen(port, () => {
   console.log(`Express Server Listening on localhost: ${port}`);

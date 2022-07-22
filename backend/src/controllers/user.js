@@ -29,7 +29,6 @@ exports.getUserById = (req, res) => {
   User.findOne({ _id: req.params.id }, (err, user) => {
     if (err) return res.status(400).send(err);
     else {
-      // console.log("getUSerByUid=>  uid=", req.params);
       return res.status(200).send(user);
     }
   });

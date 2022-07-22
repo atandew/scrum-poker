@@ -25,20 +25,15 @@ exports.getAllUsers = (req, res) => {
   });
 };
 
-// exports.getUserByUid = (req, res) => {
-//   User.findOne({ uid: req.params.uid }, (err, user) => {
-//     if (err) return res.status(400).send(err);
-//     else {
-//       // console.log("getUSerByUid=>  uid=", req.params);
-//       return res.status(200).send(user);
-//     }
-//   });
-
-//   //   Product.find((err, products) => {
-//   //     if (err) return res.status(400).send(err);
-//   //     else return res.status(200).send(products);
-//   //   });
-// };
+exports.getUserById = (req, res) => {
+  User.findOne({ _id: req.params.id }, (err, user) => {
+    if (err) return res.status(400).send(err);
+    else {
+      // console.log("getUSerByUid=>  uid=", req.params);
+      return res.status(200).send(user);
+    }
+  });
+};
 
 // exports.updateUser = (req, res) => {
 //   const { firstName, lastName, dob, phone, address, email, uid } = req.body;

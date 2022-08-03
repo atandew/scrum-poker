@@ -1,10 +1,10 @@
 import React from 'react';
-
+import Container from "react-bootstrap/Container";
 function CreatePokerBoard(props) {
     return (
-        <div>
+        <Container>
             Create Poker 1
-        </div>
+        </Container>
     );
 }
 

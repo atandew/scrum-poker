@@ -1,10 +1,10 @@
 const Board = require("../models/Board");
 
 exports.createBoard = (req, res) => {
-  const { boardName, description } = req.body;
+  const { boardName, description, users } = req.body;
 
   const board = new Board({
-    boardName, description
+    boardName, description, users
   });
 
   board.save((error, board) => {

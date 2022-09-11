@@ -6,9 +6,9 @@ import "./NavbarComp.css";
 function NavbarComp(props) {
   return (
     <Navbar bg="dark" variant="dark">
-      <Navbar.Brand href="#home" className="ml-2">Navbar</Navbar.Brand>
+      <Navbar.Brand href="/" className="ml-2">Navbar</Navbar.Brand>
       <Nav className="me-auto">
-        <Nav.Link href="#home">Home</Nav.Link>
+        <Nav.Link href="/">Home</Nav.Link>
       </Nav>
     </Navbar>
   );

@@ -10,7 +10,7 @@ exports.createBoard = (req, res) => {
   board.save((error, board) => {
     if (error) return res.status(400).json({ error: error });
     if (board) {
-      return res.status(201).json({ board });
+      return res.status(201).json({ id :board._id });
     }
   });
 };

@@ -1,19 +1,18 @@
 const User = require("../models/User");
-// const slugify = require("slugify");
-// const shortId = require("shortid");
 
 exports.createUser = (req, res) => {
-  const { userName, gender } = req.body;
+  const { userName, gender, boardId } = req.body;
 
   const user = new User({
     userName,
     gender,
+    boardId
   });
 
-  user.save((error, user) => {
+  user.save((error, _user) => {
     if (error) return res.status(400).json({ error: error });
-    if (user) {
-      return res.status(201).json({ user });
+    if (_user) {
+      return res.status(201).json({ id:_user._id });
     }
   });
 };

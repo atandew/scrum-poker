@@ -1,0 +1,7 @@
+.cover-page{
+    height: calc(100vh - 56px);
+}
+
+.form-body{
+    margin-top: calc(100vh - 70vh);
+}

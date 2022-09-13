@@ -10,6 +10,13 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Gender required"],
     },
+    boardId: {
+      type: String,
+      required: [true, "Board Id is required"]
+    },
+    boardPoint: {
+      type: Number
+    }
   },
   { timestamps: true }
 );

@@ -11,7 +11,6 @@ function CreatePokerBoard(props) {
   const [validated, setValidated] = useState(false);
   const [sprintName, setSprintName] = useState("");
   const [sprintDesc, setSprintDesc] = useState("");
-  //const [board, setBoard] = useState(BoardDTO)
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {

@@ -20,14 +20,12 @@ function RegisterUser(props) {
     event.stopPropagation();
 
     if (form.checkValidity()){
-      // event.preventDefault();
-      // event.stopPropagation();
       console.log(userName, gender)
       const user = new UserDTO(userName, gender,boardId);
       console.log(user)
       PokerService.registerUser(user).then(
         (res) => {
-          navigate(`/board/${res.data.id}/register-user`);
+          navigate(`/board/${boardId}/register-user/${res.data.id}`);
         },
         (err) => {
           console.log("err=>", err);

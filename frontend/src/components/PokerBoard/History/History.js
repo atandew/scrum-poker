@@ -3,7 +3,7 @@ import React from 'react';
 function History(props) {
     return (
         <div>
-            History
+           <div className="card">History</div>
         </div>
     );
 }

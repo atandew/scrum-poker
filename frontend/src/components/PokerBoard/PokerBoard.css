@@ -1,0 +1,6 @@
+.card{
+    box-shadow: 2px 2px 20px 5px rgba(55, 56, 56, 0.116);
+    min-height: 56vh;
+    border: none;
+    padding: 1em;
+}

@@ -3,7 +3,7 @@ const express = require("express");
 const Cors = require("cors");
 const dotenv = require("dotenv");
 //App config
-//mongodb password for amzon-clone user = jW4cHbvnlwYXbiks
+//mongodb password for amazon-clone user = jW4cHbvnlwYXbiks
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 8001;

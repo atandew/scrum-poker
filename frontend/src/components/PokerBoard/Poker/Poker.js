@@ -2,8 +2,8 @@ import React from "react";
 import "./Poker.css";
 function Poker(props) {
   return (
-    <div>
-      <div className="poker-container">
+    <div className="poker-container">
+      <div className="poker-card-container">
         <div className="poker-card">
           <img src="..\..\..\assets\images\cards\one.png" alt="one" />
         </div>

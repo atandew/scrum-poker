@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import History from "./History/History";
+import PointsGraph from "./PointsGraph/PointsGraph.js";
 import Poker from "./Poker/Poker";
 import "./PokerBoard.css";
 import UsersPointing from "./UsersPointing/UsersPointing";
@@ -17,7 +18,10 @@ function PokerBoard(props) {
       <div>
         <Poker />
       </div>
-      <div className="row border m-0 p-0">
+      <div className="row m-0 p-0">
+        <div className="col">
+          <PointsGraph />
+        </div>
         <div className="col">
           <UsersPointing />
         </div>

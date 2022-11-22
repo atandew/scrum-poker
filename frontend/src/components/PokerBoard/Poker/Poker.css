@@ -1,12 +1,12 @@
 .poker-card{
-    width:20%;
-    height: 40vh;
+    height: 30vh;
     margin-left:1.5rem;
     margin-right:1.5rem;
     border-radius: 10px;
     box-shadow: 2px 2px 20px 5px rgba(55, 56, 56, 0.342);
     -webkit-animation: flip 2s;
     animation: flip 1.5s;
+    border: none;
 }
 
 .poker-card:hover{
@@ -20,10 +20,15 @@ img{
     object-fit:fill;
 }
 
-.poker-container{
+.poker-card-container{
     display: flex;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    width: fit-content;
+    margin: auto;
+}
+
+.poker-container{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 @-webkit-keyframes flip {

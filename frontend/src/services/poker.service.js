@@ -24,6 +24,10 @@ const PokerService = {
   getUserByIdAndBoardId: async function (userId, boardId) {
     return axios_api.get(`/user/${userId}/board/${boardId}`);
   },
+
+  getUsersByBoardId: async function (boardId) {
+    return axios_api.get(`/user/board/${boardId}`);
+  },
 };
 
 export default PokerService;

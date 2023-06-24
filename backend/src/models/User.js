@@ -16,6 +16,7 @@ const userSchema = mongoose.Schema(
     },
     boardPoint: {
       type: Number,
+      default: 0,
     },
     showPoints: {
       type: Boolean,

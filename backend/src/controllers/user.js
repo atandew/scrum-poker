@@ -26,6 +26,14 @@ exports.getAllUsers = (req, res) => {
   });
 };
 
+exports.getUsersByBoardId = (req, res) => {
+  User.find({ boardId: req.params.boardId }, (err, users) => {
+    console.log("boardId=>", req.params.boardId);
+    if (err) return res.status(400).send(err);
+    else return res.status(200).send(users);
+  });
+};
+
 exports.getUserById = (req, res) => {
   User.findOne({ _id: req.params.id }, (err, user) => {
     if (err) return res.status(400).send(err);

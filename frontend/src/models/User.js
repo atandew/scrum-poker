@@ -1,8 +1,9 @@
 export class UserDTO {
-  constructor(userName, gender, boardId, response) {
+  constructor(userName, gender, boardId, boardPoint, showPoints) {
     this.userName = userName;
     this.gender = gender;
     this.boardId = boardId;
-    this.response = response;
+    this.boardPoint = boardPoint;
+    this.showPoints = showPoints;
   }
 }

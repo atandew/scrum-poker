@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -12,20 +12,44 @@ function RegisterUser(props) {
   const [userName, setUserName] = useState("");
   const [gender, setGender] = useState("M");
   const navigate = useNavigate();
-  const {boardId} = useParams();
+  const { boardId } = useParams();
+  const [isBoardAdminRegistered, setBoardAdminRegistered] = useState(false);
+
+  useEffect(() => {
+    PokerService.isBoardAdminRegistered(boardId).then(
+      (res) => {
+        setBoardAdminRegistered(res.data);
+      },
+      (err) => {
+        console.log("err =>", err);
+      }
+    );
+  }, [boardId]);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     event.preventDefault();
     event.stopPropagation();
 
-    if (form.checkValidity()){
-      console.log(userName, gender)
-      const user = new UserDTO(userName, gender,boardId);
-      console.log(user)
+    if (form.checkValidity()) {
+      console.log(userName, gender);
+      const user = new UserDTO(userName, gender, boardId);
+      console.log(user);
       PokerService.registerUser(user).then(
-        (res) => {
-          navigate(`/board/${boardId}/register-user/${res.data.id}`);
+        (user) => {
+          if (!isBoardAdminRegistered) {
+            PokerService.updateCreatedByInBoard(boardId, user.data.id).then(
+              (res) => {
+                console.log("updateCreatedByInBoard =>", res);
+                navigate(`/board/${boardId}/user/${user.data.id}`);
+              },
+              (err) => {
+                console.log("err =>", err);
+              }
+            );
+          } else {
+            navigate(`/board/${boardId}/user/${user.data.id}`);
+          }
         },
         (err) => {
           console.log("err=>", err);
@@ -68,7 +92,7 @@ function RegisterUser(props) {
               >
                 <option value={"M"}>Male</option>
                 <option value={"F"}>Female</option>
-                </Form.Select>
+              </Form.Select>
             </Form.Group>
           </Row>
           <Button type="submit" className="mt-3 w-100">

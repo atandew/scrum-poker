@@ -11,7 +11,7 @@ const password = process.env.PASSWORD;
 const db = process.env.DB;
 const connection_URL = `mongodb+srv://admin:${password}@cluster0.lnf6t.mongodb.net/${db}?retryWrites=true&w=majority`;
 
-//middlewares
+//middleware
 app.use(express.json());
 app.use(Cors());
 
@@ -36,7 +36,7 @@ mongoose
 
 //API Endpoints
 app.get("/", (req, res) => {
-  res.status(200).send("srum-poker express server is working fine.");
+  res.status(200).send("scrum-poker express server is working fine.");
 });
 
 //Listener

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const boardSchema = mongoose.Schema(
   {
@@ -8,7 +9,11 @@ const boardSchema = mongoose.Schema(
     },
     description: {
       type: String,
-    }
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { timestamps: true }
 );

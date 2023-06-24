@@ -23,9 +23,13 @@ function CreatePokerBoard(props) {
         (res) => {
           console.log(res);
           navigate(`/board/${res.data.id}/register-user`);
+          // navigate({
+          //   pathname: `/board/${res.data.id}/register-user`,
+          //   search: "?isAdmin=true",
+          // });
         },
         (err) => {
-          console.log("err=>", err);
+          console.log("err reg user=>", err);
         }
       );
     }

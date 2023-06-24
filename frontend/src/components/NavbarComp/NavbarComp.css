@@ -1,3 +1,79 @@
 .ml-2{
     margin-left: 1em;
 }
+
+.board-name{
+    width: 90%;
+        text-align: center;
+}
+
+.user-actions-container{
+width: max-content;
+min-width: 20%;
+clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 99;
+}
+
+.board-name-text{
+    color: rgb(252, 252, 252);
+    font-size: 1.5em;
+}
+
+.button{
+    margin-left: 1em;
+    margin-right: 1em;
+    width: 7em;
+}
+
+.user-name-container{
+   background-color: rgb(83, 36, 224);
+   font-size: 20px;
+   width: 2em;
+   height: 2em;
+   border-radius: 50%;
+   text-align: center;
+   padding-top: 5px;
+   color: aliceblue;
+}
+
+.navbar-text::before{
+    color: rgb(255, 0, 0);
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.user-name-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.user-name-container .tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.user-name-container .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}

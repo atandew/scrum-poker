@@ -1,0 +1,4 @@
+.card > .chart > .apexcharts-svg{
+    border: 1px solid black;
+    padding: auto;
+}

@@ -1,18 +1,20 @@
 const User = require("../models/User");
+const BoardController = require("./board");
 
 exports.createUser = (req, res) => {
-  const { userName, gender, boardId } = req.body;
+  const { userName, gender, boardId, isAdmin } = req.body;
 
   const user = new User({
     userName,
     gender,
-    boardId
+    boardId,
+    isAdmin,
   });
 
   user.save((error, _user) => {
     if (error) return res.status(400).json({ error: error });
     if (_user) {
-      return res.status(201).json({ id:_user._id });
+      return res.status(201).json({ id: _user._id });
     }
   });
 };
@@ -31,6 +33,18 @@ exports.getUserById = (req, res) => {
       return res.status(200).send(user);
     }
   });
+};
+
+exports.getUserByIdAndBoardId = (req, res) => {
+  User.findOne(
+    { _id: req.params.id, boardId: req.params.boardId },
+    (err, user) => {
+      if (err) return res.status(400).send(err);
+      else {
+        return res.status(200).send(user);
+      }
+    }
+  );
 };
 
 // exports.updateUser = (req, res) => {

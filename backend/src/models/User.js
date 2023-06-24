@@ -12,11 +12,15 @@ const userSchema = mongoose.Schema(
     },
     boardId: {
       type: String,
-      required: [true, "Board Id is required"]
+      required: [true, "Board Id is required"],
     },
     boardPoint: {
-      type: Number
-    }
+      type: Number,
+    },
+    showPoints: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

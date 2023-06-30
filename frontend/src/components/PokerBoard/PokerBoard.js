@@ -7,23 +7,34 @@ import Poker from "./Poker/Poker";
 import "./PokerBoard.css";
 import UsersPointing from "./UsersPointing/UsersPointing";
 import io from "socket.io-client";
-import _baseURL from "../../axios";
 
 function PokerBoard(props) {
   const { boardId, userId } = useParams();
   const [board, setBoard] = useState();
 
-  const socket = io.connect(_baseURL);
-  socket.on("Data", (data) => {
-    console.log(data);
-  });
-  socket.on("Temperature", (data) => {
-    console.log(data);
-  });
-  socket.emit("Realtime", "Realll");
+  var socket;
+  const ENDPOINT = "http://localhost:8002";
 
   useEffect(() => {
     console.log("boardId=>", boardId, " userId=>", userId);
+    fetchBoard();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    socket = io(ENDPOINT);
+    socket.emit("setup", boardId);
+    socket.on("connected", () => {
+      console.log("Socket Connected");
+    });
+    socket.on("show-board-points", () => {
+      console.log("show-board-points");
+      fetchBoard();
+    });
+    socket.on("hide-board-points", () => {
+      console.log("hide-board-points");
+      fetchBoard();
+    });
+  }, [boardId, userId]);
+
+  function fetchBoard() {
     PokerService.getBoardById(boardId).then(
       (res) => {
         setBoard(res.data);
@@ -31,7 +42,7 @@ function PokerBoard(props) {
       },
       (err) => {}
     );
-  }, [boardId, userId]);
+  }
 
   return (
     <div>

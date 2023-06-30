@@ -7,7 +7,8 @@ import React, { useEffect, useState } from "react";
 import PokerService from "../../services/poker.service.js";
 import { Tooltip } from "react-tooltip";
 import copy from "copy-to-clipboard";
-
+import io from "socket.io-client";
+var socket;
 function NavbarComp(props) {
   const [userName, setUserName] = useState("");
   const [boardName, setBoardName] = useState("");
@@ -16,10 +17,16 @@ function NavbarComp(props) {
   const [boardId, setBoardId] = useState(null);
   const [showPointsFlag, setShowPointsFlag] = useState(false);
   const location = useLocation();
+  const ENDPOINT = "http://localhost:8002";
 
   useEffect(() => {
     setNavbarDetails();
-  }, [location]);
+    socket = io(ENDPOINT);
+    socket.emit("setup", boardId);
+    socket.on("connected", () => {
+      console.log("Socket Connected");
+    });
+  }, []);
 
   function setNavbarDetails() {
     var path = location.pathname;
@@ -86,11 +93,12 @@ function NavbarComp(props) {
 
   function showPoints() {
     var spf = showPointsFlag ? false : true;
-    console.log("showPointsFlag =>", showPointsFlag);
+    console.log("showPointsFlag =>", spf);
     PokerService.showBoardPoints(boardId, spf)
       .then((res) => {
-        console.log("res=>", res.data, "|| showPointsFlag=>", spf);
+        // console.log("res=>", res.data, "|| showPointsFlag=>", spf);
         setShowPointsFlag(res.data);
+        socket.emit(spf ? "show-points" : "hide-points", boardId);
       })
       .catch((ex) => {
         console.log("ex=>", ex);

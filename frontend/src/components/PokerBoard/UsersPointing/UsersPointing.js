@@ -15,7 +15,6 @@ function UsersPointing(props) {
     PokerService.getUsersByBoardId(boardId).then(
       (_users) => {
         setUsers(_users.data);
-        console.log("users =>", users);
       },
       (err) => {
         console.log("err =>", err);
@@ -28,9 +27,9 @@ function UsersPointing(props) {
     <div>
       <div className="card">
         <div className="user-card-container">
-          {users.map((user) => {
+          {users.map((user, key) => {
             return (
-              <div className="user-card">
+              <div className="user-card" key={key + 999}>
                 <div className="user-img">
                   {user.gender === "M" ? (
                     <img src="..\..\..\assets\images\male.png" alt=""></img>

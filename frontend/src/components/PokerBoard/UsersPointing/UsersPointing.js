@@ -14,11 +14,6 @@ function UsersPointing(props) {
     var boardId = splittedPath[2];
     PokerService.getUsersByBoardId(boardId).then(
       (_users) => {
-        console.log("_users =>", _users.data);
-        let userArray = new Array(new UserDTO());
-        Array(_users.data).forEach((user) => {
-          let _u = new UserDTO(user.user);
-        });
         setUsers(_users.data);
         console.log("users =>", users);
       },
@@ -26,6 +21,7 @@ function UsersPointing(props) {
         console.log("err =>", err);
       }
     );
+    console.log("props =>", props.board);
   }, []);
 
   return (
@@ -44,7 +40,11 @@ function UsersPointing(props) {
                 </div>
                 <div className="user-name">{user.userName}</div>
                 <div className="user-point">
-                  {user.showPoints ? <p>{user.boardPoint}</p> : <p>Point</p>}
+                  {props?.board?.showPoints ? (
+                    <p>{user.boardPoint}</p>
+                  ) : (
+                    <p>Point</p>
+                  )}
                 </div>
               </div>
             );

@@ -18,10 +18,6 @@ const userSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    showPoints: {
-      type: Boolean,
-      default: false,
-    },
   },
   { timestamps: true }
 );

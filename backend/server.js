@@ -13,7 +13,7 @@ const connection_URL = `mongodb+srv://admin:${password}@cluster0.lnf6t.mongodb.n
 
 //middleware
 app.use(express.json());
-app.use(Cors());
+app.use(Cors("*"));
 
 //routing
 const userRouter = require("./src/routes/user.js");
@@ -40,6 +40,30 @@ app.get("/", (req, res) => {
 });
 
 //Listener
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Express Server Listening on localhost: ${port}`);
+});
+
+io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("Connected & Socket Id is ", socket.id);
+  socket.emit("Data", "first emit");
+
+  socket.on("disconnect", function () {
+    console.log("User Disconnected");
+  });
+
+  app.use("/temperature", (req, res) => {
+    socket.emit("Temperature", req.body.temp);
+    res.send(200);
+  });
+
+  socket.on("Realtime", (data) => {
+    console.log(data);
+  });
 });

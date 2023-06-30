@@ -58,3 +58,14 @@ exports.isBoardAdminRegistered = (req, res) => {
     }
   });
 };
+
+exports.showBoardPoints = (req, res) => {
+  Board.findOneAndUpdate(
+    { _id: req.params.boardId },
+    { showPoints: req.params.showPoints },
+    (err, _res) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).send(req.params.showPoints);
+    }
+  );
+};

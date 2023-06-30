@@ -14,6 +14,10 @@ const boardSchema = mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+    showPoints: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

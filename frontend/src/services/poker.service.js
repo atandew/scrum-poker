@@ -28,6 +28,10 @@ const PokerService = {
   getUsersByBoardId: async function (boardId) {
     return axios_api.get(`/user/board/${boardId}`);
   },
+
+  showBoardPoints: async function (boardId, showPoints) {
+    return axios_api.patch(`/board/${boardId}/show-point/${showPoints}`);
+  },
 };
 
 export default PokerService;

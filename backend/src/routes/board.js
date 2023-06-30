@@ -5,6 +5,7 @@ const {
   getAllBoards,
   updateCreatedByInBoard,
   isBoardAdminRegistered,
+  showBoardPoints,
 } = require("../controllers/board.js");
 
 var boardRouter = express.Router();
@@ -17,5 +18,6 @@ boardRouter.get(
   "/board/:boardId/isBoardAdminRegistered/",
   isBoardAdminRegistered
 );
+boardRouter.patch("/board/:boardId/show-point/:showPoints",showBoardPoints);
 
 module.exports = boardRouter;

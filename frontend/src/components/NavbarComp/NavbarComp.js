@@ -13,14 +13,22 @@ function NavbarComp(props) {
   const [boardName, setBoardName] = useState("");
   const [isAdminUser, setAdminUserFlag] = useState(false);
   const [isBoardPage, setBoardPageFlag] = useState(false);
+  const [boardId, setBoardId] = useState(null);
+  const [showPointsFlag, setShowPointsFlag] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
+    setNavbarDetails();
+  }, [location]);
+
+  function setNavbarDetails() {
     var path = location.pathname;
-    var splittedPath = path?.split("/");
+    var splittedPath = path.split("/");
     if (splittedPath.length > 4) {
       setBoardPageFlag(true);
       var boardId = splittedPath[2];
+      setBoardId(boardId);
+      fetchBoardDetails(boardId);
       var userId = splittedPath[4];
       PokerService.getUserByIdAndBoardId(userId, boardId).then(
         (user) => {
@@ -30,7 +38,9 @@ function NavbarComp(props) {
               setAdminUserFlag(board?.data?.createdBy === userId);
               setBoardName(board?.data?.boardName);
             },
-            (err) => {}
+            (err) => {
+              console.log("err=>", err);
+            }
           );
         },
         (err) => {
@@ -38,7 +48,19 @@ function NavbarComp(props) {
         }
       );
     }
-  }, [location]);
+  }
+
+  function fetchBoardDetails(boardId) {
+    PokerService.getBoardById(boardId).then(
+      (board) => {
+        console.log("board =>", board.data);
+        setShowPointsFlag(board?.data?.showPoints);
+      },
+      (err) => {
+        console.log("err =>", err);
+      }
+    );
+  }
 
   const getUserNameInitials = (userName) => {
     const splittedUN = userName.split(" ");
@@ -62,13 +84,26 @@ function NavbarComp(props) {
     copy(regUserUrl);
   }
 
+  function showPoints() {
+    var spf = showPointsFlag ? false : true;
+    console.log("showPointsFlag =>", showPointsFlag);
+    PokerService.showBoardPoints(boardId, spf)
+      .then((res) => {
+        console.log("res=>", res.data, "|| showPointsFlag=>", spf);
+        setShowPointsFlag(res.data);
+      })
+      .catch((ex) => {
+        console.log("ex=>", ex);
+      });
+  }
+
   return (
     <Navbar bg="dark p-2" variant="dark">
       <Navbar.Brand href="/" className="ml-2">
         Scrum-Poker
       </Navbar.Brand>
       <Nav className="me-auto">
-        <Nav.Link href="/">Home</Nav.Link>
+        <Nav.Link href="/">Create</Nav.Link>
       </Nav>
       {isBoardPage ? (
         <Navbar.Text className="board-name">
@@ -83,6 +118,13 @@ function NavbarComp(props) {
         {isAdminUser ? (
           <>
             <Button variant="outline-success button">Clear</Button>
+            <Button
+              variant="outline-success button"
+              onClick={() => showPoints()}
+            >
+              {/* {showPointsFlag ? "Show" : "Hide"} */}
+              {showPointsFlag ? "Hide" : "Show"}
+            </Button>
             <Button variant="outline-success button" onClick={copyURL}>
               Copy URL
             </Button>

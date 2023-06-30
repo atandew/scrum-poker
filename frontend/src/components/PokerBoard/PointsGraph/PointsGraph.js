@@ -7,7 +7,7 @@ function PointsGraph(props) {
 
   useEffect(() => {
     console.log("props=>", props);
-  }, [props]);
+  }, []);
   return (
     <div>
       <div className="card">

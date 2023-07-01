@@ -7,54 +7,94 @@ import Poker from "./Poker/Poker";
 import "./PokerBoard.css";
 import UsersPointing from "./UsersPointing/UsersPointing";
 import io from "socket.io-client";
+import { BoardDTO } from "../../models/Board";
+import { UserDTO } from "../../models/User";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function PokerBoard(props) {
   const { boardId, userId } = useParams();
-  const [board, setBoard] = useState();
-
+  const [board, setBoard] = useState(new BoardDTO());
+  const [users, setUsers] = useState(new Array(new UserDTO()));
+  const navigate = useNavigate();
   var socket;
-  const ENDPOINT = "http://localhost:8002";
+  const location = useLocation();
 
   useEffect(() => {
-    console.log("boardId=>", boardId, " userId=>", userId);
-    fetchBoard();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    socket = io(ENDPOINT);
-    socket.emit("setup", boardId);
-    socket.on("connected", () => {
-      console.log("Socket Connected");
-    });
-    socket.on("show-board-points", () => {
-      console.log("show-board-points");
-      fetchBoard();
-    });
-    socket.on("hide-board-points", () => {
-      console.log("hide-board-points");
-      fetchBoard();
-    });
+    //console.log("boardId=>", boardId, " userId=>", userId);
+    fetchBoardAndUsers();
+
+    if (!socket) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      socket = io(PokerService.getClientURL());
+      socket.emit("setup", boardId);
+      socket.on("connected", () => {
+        console.log("Socket Connected");
+      });
+      socket.on("show-board-points", () => {
+        //console.log("show-board-points");
+        fetchBoardAndUsers();
+      });
+      socket.on("hide-board-points", () => {
+        //console.log("hide-board-points");
+        fetchBoardAndUsers();
+      });
+
+      socket.on("refresh-board", () => {
+        console.log("refresh-board");
+        fetchBoardAndUsers();
+      });
+    }
   }, [boardId, userId]);
 
-  function fetchBoard() {
+  function checkUserExists(_users) {
+    const isUserExists = _users.some((u) => u._id === userId);
+    var path = location.pathname;
+    if (!isUserExists && !path.includes("register")) {
+      navigate(`/`);
+    }
+  }
+
+  function fetchBoardAndUsers() {
     PokerService.getBoardById(boardId).then(
       (res) => {
         setBoard(res.data);
-        console.log("res =>", res);
+        //console.log("res =>", res);
       },
       (err) => {}
+    );
+    PokerService.getUsersByBoardId(boardId).then(
+      (_users) => {
+        //console.log("users =>", _users);
+        setUsers(_users.data);
+        checkUserExists(_users.data);
+      },
+      (err) => {
+        //console.log("err =>", err);
+      }
     );
   }
 
   return (
     <div>
       <div>
-        <Poker />
+        <Poker boardId={boardId} userId={userId} />
       </div>
       <div className="row m-0 p-0">
         <div className="col">
-          <PointsGraph board={board} />
+          <PointsGraph
+            board={board}
+            boardId={boardId}
+            userId={userId}
+            users={users}
+          />
         </div>
         <div className="col">
-          <UsersPointing board={board} />
+          <UsersPointing
+            users={users}
+            board={board}
+            boardId={boardId}
+            userId={userId}
+          />
         </div>
         <div className="col">
           <History />

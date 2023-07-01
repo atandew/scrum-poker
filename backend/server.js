@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
   socket.on("setup", (boardId) => {
     socket.join(boardId);
     socket.emit("connected");
+    socket.in(boardId).emit("refresh-board");
   });
 
   socket.on("show-points", (boardId) => {
@@ -67,6 +68,15 @@ io.on("connection", (socket) => {
     socket.in(boardId).emit("hide-board-points");
   });
 
+  socket.on("refresh-board", (boardId) => {
+    socket.in(boardId).emit("refresh-board");
+  });
+
+  app.get("/api/board/:boardId/refresh-board", (req, res) => {
+    console.log("refresh-board through api");
+    socket.in(req.params.boardId).emit("refresh-board");
+    return res.status(200).send(true);
+  });
 
   // socket.on("typing", (room) => socket.in(room).emit("typing"));
   // socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
@@ -74,7 +84,7 @@ io.on("connection", (socket) => {
   // socket.on("new message", (newMessageRecieved) => {
   //   var chat = newMessageRecieved.chat;
 
-  //   if (!chat.users) return console.log("chat.users not defined");
+  //   if (!chat.users) return //console.log("chat.users not defined");
 
   //   chat.users.forEach((user) => {
   //     if (user._id == newMessageRecieved.sender._id) return;
@@ -84,7 +94,7 @@ io.on("connection", (socket) => {
   // });
 
   socket.off("setup", () => {
-    console.log("USER DISCONNECTED");
+    //console.log("USER DISCONNECTED");
     socket.leave(userData._id);
   });
 });

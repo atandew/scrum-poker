@@ -6,3 +6,10 @@ export class BoardDTO {
     this.showPoints = showPoints;
   }
 }
+
+// export class BoardParams {
+//   constructor(boardId, userId) {
+//     this.userId = userId;
+//     this.boardId = boardId;
+//   }
+// }

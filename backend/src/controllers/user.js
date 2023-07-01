@@ -54,6 +54,35 @@ exports.getUserByIdAndBoardId = (req, res) => {
   );
 };
 
+exports.setBoardPoint = (req, res) => {
+  //console.log("req.body =>", req.body.boardPoint);
+  User.findOneAndUpdate(
+    { _id: req.params.userId },
+    { boardPoint: req.body.boardPoint },
+    (err, _res) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).send(true);
+    }
+  );
+};
+
+exports.clearAllUsersPoint = (req, res) => {
+  User.updateMany(
+    { boardId: req.params.boardId },
+    { boardPoint: 0 },
+    (err, _res) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).send(true);
+    }
+  );
+};
+
+exports.deleteUserById = (req, res) => {
+  User.deleteOne({ _id: req.params.userId }, (err, _res) => {
+    if (err) return res.status(400).send(err);
+    return res.status(200).send(true);
+  });
+};
 // exports.updateUser = (req, res) => {
 //   const { firstName, lastName, dob, phone, address, email, uid } = req.body;
 //   User.updateOne(

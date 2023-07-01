@@ -9,7 +9,7 @@ exports.createBoard = (req, res) => {
     createdBy,
   });
 
-  console.log("create board =>", board);
+  //console.log("create board =>", board);
   board.save((error, board) => {
     if (error) return res.status(400).json({ error: error });
     if (board) {
@@ -20,7 +20,7 @@ exports.createBoard = (req, res) => {
 
 exports.updateCreatedByInBoard = (req, res) => {
   const { createdBy } = req.body;
-  console.log("updateCreatedByInBoard =>", createdBy);
+  //console.log("updateCreatedByInBoard =>", createdBy);
   Board.updateOne(
     { _id: req.params.boardId },
     { createdBy: createdBy },
@@ -51,8 +51,8 @@ exports.isBoardAdminRegistered = (req, res) => {
   Board.findById(req.params.boardId, (err, board) => {
     if (err) return res.status(400).send(err);
     else {
-      console.log("board =>", board);
-      console.log("board.createdBy =>", board.createdBy);
+      //console.log("board =>", board);
+      //console.log("board.createdBy =>", board.createdBy);
       if (board?.createdBy) return res.status(200).send(true);
       else return res.status(200).send(false);
     }

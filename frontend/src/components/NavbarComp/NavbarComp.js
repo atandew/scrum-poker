@@ -8,25 +8,27 @@ import PokerService from "../../services/poker.service.js";
 import { Tooltip } from "react-tooltip";
 import copy from "copy-to-clipboard";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 var socket;
 function NavbarComp(props) {
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState(null);
   const [boardName, setBoardName] = useState("");
   const [isAdminUser, setAdminUserFlag] = useState(false);
   const [isBoardPage, setBoardPageFlag] = useState(false);
   const [boardId, setBoardId] = useState(null);
   const [showPointsFlag, setShowPointsFlag] = useState(false);
   const location = useLocation();
-  const ENDPOINT = "http://localhost:8002";
 
   useEffect(() => {
     setNavbarDetails();
-    socket = io(ENDPOINT);
-    socket.emit("setup", boardId);
-    socket.on("connected", () => {
-      console.log("Socket Connected");
-    });
-  }, []);
+    if (!socket) {
+      socket = io(PokerService.getClientURL());
+      socket.emit("setup", boardId);
+      socket.on("connected", () => {
+        //console.log("Socket Connected");
+      });
+    }
+  }, [location]);
 
   function setNavbarDetails() {
     var path = location.pathname;
@@ -42,37 +44,42 @@ function NavbarComp(props) {
           setUserName(user.data.userName);
           PokerService.getBoardById(boardId).then(
             (board) => {
-              setAdminUserFlag(board?.data?.createdBy === userId);
+              const isAdmin = board?.data?.createdBy === userId;
+              setAdminUserFlag(isAdmin);
+              PokerService.isUserAdmin = isAdmin;
               setBoardName(board?.data?.boardName);
             },
             (err) => {
-              console.log("err=>", err);
+              //console.log("err=>", err);
             }
           );
         },
         (err) => {
-          console.log("err =>", err);
+          //console.log("err =>", err);
         }
       );
+    } else {
+      setBoardPageFlag(false);
     }
   }
 
   function fetchBoardDetails(boardId) {
     PokerService.getBoardById(boardId).then(
       (board) => {
-        console.log("board =>", board.data);
+        //console.log("board =>", board.data);
         setShowPointsFlag(board?.data?.showPoints);
       },
       (err) => {
-        console.log("err =>", err);
+        //console.log("err =>", err);
       }
     );
   }
 
   const getUserNameInitials = (userName) => {
-    const splittedUN = userName.split(" ");
-    if (splittedUN.length === 0) return "??";
-    if (splittedUN.length === 1)
+    const splittedUN = userName?.split(" ");
+    if (!splittedUN) return "??";
+    if (splittedUN?.length === 1 && splittedUN[0] === "") return "??";
+    if (splittedUN?.length === 1)
       return Array.from(splittedUN[0])[0]?.toUpperCase();
     return (
       Array.from(splittedUN[0])[0]?.toUpperCase() +
@@ -93,16 +100,28 @@ function NavbarComp(props) {
 
   function showPoints() {
     var spf = showPointsFlag ? false : true;
-    console.log("showPointsFlag =>", spf);
+    //console.log("showPointsFlag =>", spf);
     PokerService.showBoardPoints(boardId, spf)
       .then((res) => {
-        // console.log("res=>", res.data, "|| showPointsFlag=>", spf);
+        // //console.log("res=>", res.data, "|| showPointsFlag=>", spf);
         setShowPointsFlag(res.data);
         socket.emit(spf ? "show-points" : "hide-points", boardId);
       })
       .catch((ex) => {
-        console.log("ex=>", ex);
+        //console.log("ex=>", ex);
       });
+  }
+
+  function clearBoardPoints() {
+    PokerService.clearUsersBoardPoint(boardId).then(
+      (res) => {
+        socket.emit("refresh-board", boardId);
+        //console.log("clear board points res =>", res);
+      },
+      (err) => {
+        //console.log("err =>", err);
+      }
+    );
   }
 
   return (
@@ -125,7 +144,14 @@ function NavbarComp(props) {
       <Navbar.Collapse className="justify-content-end user-actions-container">
         {isAdminUser ? (
           <>
-            <Button variant="outline-success button">Clear</Button>
+            <Button
+              variant="outline-success button"
+              onClick={() => {
+                clearBoardPoints();
+              }}
+            >
+              Clear
+            </Button>
             <Button
               variant="outline-success button"
               onClick={() => showPoints()}

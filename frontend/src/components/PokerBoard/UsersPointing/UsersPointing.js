@@ -1,33 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { UserDTO } from "../../../models/User";
-import PokerService from "../../../services/poker.service";
 import "./UsersPointing.css";
+import PokerService from "../../../services/poker.service";
+import { BsTrash } from "react-icons/bs";
 
 function UsersPointing(props) {
-  const location = useLocation();
+  //const location = useLocation();
   const [users, setUsers] = useState(new Array(new UserDTO()));
 
   useEffect(() => {
-    var path = location.pathname;
-    var splittedPath = path?.split("/");
-    var boardId = splittedPath[2];
-    PokerService.getUsersByBoardId(boardId).then(
-      (_users) => {
-        setUsers(_users.data);
+    //console.log("props.users =>", props.users);
+    setUsers(props.users);
+  }, [props.users, props.board]);
+
+  function deleteUser(userId) {
+    PokerService.deleteUserById(userId).then(
+      (res) => {
+        refreshBoard();
       },
       (err) => {
         console.log("err =>", err);
       }
     );
-    console.log("props =>", props.board);
-  }, []);
+  }
+
+  function refreshBoard() {
+    PokerService.refreshBoard(props.boardId).then(
+      (res) => {},
+      (err) => {
+        console.log("err =>", err);
+      }
+    );
+  }
 
   return (
     <div>
       <div className="card">
         <div className="user-card-container">
-          {users.map((user, key) => {
+          {users?.map((user, key) => {
             return (
               <div className="user-card" key={key + 999}>
                 <div className="user-img">
@@ -38,13 +48,27 @@ function UsersPointing(props) {
                   )}
                 </div>
                 <div className="user-name">{user.userName}</div>
-                <div className="user-point">
+                <div
+                  className={"user-point" + (user.boardPoint ? " pointed" : "")}
+                >
                   {props?.board?.showPoints ? (
                     <p>{user.boardPoint}</p>
                   ) : (
                     <p>Point</p>
                   )}
                 </div>
+                {PokerService.isUserAdmin && props.userId !== user._id ? (
+                  <div
+                    className="delete-icon-container"
+                    onClick={() => {
+                      deleteUser(user._id);
+                    }}
+                  >
+                    <BsTrash className="delete-icon" />
+                  </div>
+                ) : (
+                  <div className="delete-icon-container"></div>
+                )}
               </div>
             );
           })}

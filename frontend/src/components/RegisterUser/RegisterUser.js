@@ -14,6 +14,7 @@ function RegisterUser(props) {
   const navigate = useNavigate();
   const { boardId } = useParams();
   const [isBoardAdminRegistered, setBoardAdminRegistered] = useState(false);
+  
 
   useEffect(() => {
     PokerService.isBoardAdminRegistered(boardId).then(
@@ -21,7 +22,7 @@ function RegisterUser(props) {
         setBoardAdminRegistered(res.data);
       },
       (err) => {
-        console.log("err =>", err);
+        //console.log("err =>", err);
       }
     );
   }, [boardId]);
@@ -32,19 +33,19 @@ function RegisterUser(props) {
     event.stopPropagation();
 
     if (form.checkValidity()) {
-      console.log(userName, gender);
+      //console.log(userName, gender);
       const user = new UserDTO(userName, gender, boardId);
-      console.log(user);
+      //console.log(user);
       PokerService.registerUser(user).then(
         (user) => {
           if (!isBoardAdminRegistered) {
             PokerService.updateCreatedByInBoard(boardId, user.data.id).then(
               (res) => {
-                console.log("updateCreatedByInBoard =>", res);
+                //console.log("updateCreatedByInBoard =>", res);
                 navigate(`/board/${boardId}/user/${user.data.id}`);
               },
               (err) => {
-                console.log("err =>", err);
+                //console.log("err =>", err);
               }
             );
           } else {
@@ -52,7 +53,7 @@ function RegisterUser(props) {
           }
         },
         (err) => {
-          console.log("err=>", err);
+          //console.log("err=>", err);
         }
       );
     }

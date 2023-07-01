@@ -21,7 +21,7 @@ function CreatePokerBoard(props) {
       const board = new BoardDTO(sprintName, sprintDesc);
       PokerService.createBoard(board).then(
         (res) => {
-          console.log(res);
+          //console.log(res);
           navigate(`/board/${res.data.id}/register-user`);
           // navigate({
           //   pathname: `/board/${res.data.id}/register-user`,
@@ -29,7 +29,7 @@ function CreatePokerBoard(props) {
           // });
         },
         (err) => {
-          console.log("err reg user=>", err);
+          //console.log("err reg user=>", err);
         }
       );
     }

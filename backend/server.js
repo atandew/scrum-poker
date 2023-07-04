@@ -18,8 +18,10 @@ app.use(Cors("*"));
 //routing
 const userRouter = require("./src/routes/user.js");
 const boardRouter = require("./src/routes/board.js");
+const historyRouter = require("./src/routes/history.js");
 app.use("/api", userRouter);
 app.use("/api", boardRouter);
+app.use("/api", historyRouter);
 
 //Db config
 mongoose

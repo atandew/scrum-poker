@@ -1,5 +1,9 @@
+//
+const { ACTION_TYPE } = require("../constants/index.js");
 const User = require("../models/User");
-const BoardController = require("./board");
+const historyController = require("./history");
+const { AddHistory } = require("../services/History");
+const { getBoardById } = require("../services/Board.js");
 
 exports.createUser = (req, res) => {
   const { userName, gender, boardId, isAdmin } = req.body;
@@ -11,9 +15,25 @@ exports.createUser = (req, res) => {
     isAdmin,
   });
 
-  user.save((error, _user) => {
+  user.save(async (error, _user) => {
     if (error) return res.status(400).json({ error: error });
     if (_user) {
+      const board = await getBoardById(boardId);
+      if (board.createdBy && board.createdBy !== _user._id) {
+        const history = {
+          boardId: boardId,
+          userId: _user._id,
+          action: "New user added => " + userName,
+          actionType: ACTION_TYPE.UserAdded,
+        };
+        try {
+          await AddHistory(history);
+        } catch (ex) {
+          console.log("ex =>", ex.errors);
+          return res.status(400).send(ex.errors);
+        }
+      }
+
       return res.status(201).json({ id: _user._id });
     }
   });
@@ -61,7 +81,13 @@ exports.setBoardPoint = (req, res) => {
     { boardPoint: req.body.boardPoint },
     (err, _res) => {
       if (err) return res.status(400).send(err);
-      return res.status(200).send(true);
+      req.body = {
+        boardId: req.params.boardId,
+        userId: req.params.userId,
+        action: "Pointed -> " + req.body.boardPoint,
+        actionType: ACTION_TYPE.PointAdded,
+      };
+      return historyController.addHistory(req, res);
     }
   );
 };
@@ -72,7 +98,13 @@ exports.clearAllUsersPoint = (req, res) => {
     { boardPoint: 0 },
     (err, _res) => {
       if (err) return res.status(400).send(err);
-      return res.status(200).send(true);
+      req.body = {
+        boardId: req.params.boardId,
+        userId: req.params.userId,
+        action: "Cleared points",
+        actionType: ACTION_TYPE.BoardPointCleared,
+      };
+      return historyController.addHistory(req, res);
     }
   );
 };
@@ -83,6 +115,7 @@ exports.deleteUserById = (req, res) => {
     return res.status(200).send(true);
   });
 };
+
 // exports.updateUser = (req, res) => {
 //   const { firstName, lastName, dob, phone, address, email, uid } = req.body;
 //   User.updateOne(

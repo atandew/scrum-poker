@@ -5,11 +5,9 @@ import PokerService from "../../../services/poker.service";
 import { BsTrash } from "react-icons/bs";
 
 function UsersPointing(props) {
-  //const location = useLocation();
   const [users, setUsers] = useState(new Array(new UserDTO()));
 
   useEffect(() => {
-    //console.log("props.users =>", props.users);
     setUsers(props.users);
   }, [props.users, props.board]);
 

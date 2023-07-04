@@ -18,6 +18,9 @@ userRouter.get("/user/:id", getUserById);
 userRouter.get("/user/:id/board/:boardId", getUserByIdAndBoardId);
 userRouter.get("/user/board/:boardId", getUsersByBoardId);
 userRouter.patch("/user/:userId/board/:boardId", setBoardPoint);
-userRouter.patch("/user/board/:boardId/clear-points", clearAllUsersPoint);
+userRouter.patch(
+  "/user/:userId/board/:boardId/clear-points",
+  clearAllUsersPoint
+);
 userRouter.delete("/user/:userId", deleteUserById);
 module.exports = userRouter;

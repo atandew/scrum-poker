@@ -10,17 +10,18 @@ import io from "socket.io-client";
 import { BoardDTO } from "../../models/Board";
 import { UserDTO } from "../../models/User";
 import { useNavigate, useLocation } from "react-router-dom";
+import { HistoryDTO } from "../../models/History";
 
 function PokerBoard(props) {
   const { boardId, userId } = useParams();
   const [board, setBoard] = useState(new BoardDTO());
   const [users, setUsers] = useState(new Array(new UserDTO()));
+  const [histories, setHistories] = useState([]);
   const navigate = useNavigate();
   var socket;
   const location = useLocation();
 
   useEffect(() => {
-    //console.log("boardId=>", boardId, " userId=>", userId);
     fetchBoardAndUsers();
 
     if (!socket) {
@@ -58,6 +59,9 @@ function PokerBoard(props) {
     PokerService.getBoardById(boardId).then(
       (res) => {
         setBoard(res.data);
+        if (res.data?.showHistory) {
+          fetchHistory();
+        }
         //console.log("res =>", res);
       },
       (err) => {}
@@ -69,7 +73,18 @@ function PokerBoard(props) {
         checkUserExists(_users.data);
       },
       (err) => {
-        //console.log("err =>", err);
+        console.log("err =>", err);
+      }
+    );
+  }
+
+  function fetchHistory() {
+    PokerService.getHistory(boardId).then(
+      (res) => {
+        setHistories(res.data);
+      },
+      (err) => {
+        console.log("err =>", err);
       }
     );
   }
@@ -97,7 +112,13 @@ function PokerBoard(props) {
           />
         </div>
         <div className="col">
-          <History />
+          <History
+            board={board}
+            boardId={boardId}
+            userId={userId}
+            users={users}
+            histories={histories}
+          />
         </div>
       </div>
     </div>

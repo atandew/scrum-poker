@@ -8,7 +8,7 @@ import PokerService from "../../services/poker.service.js";
 import { Tooltip } from "react-tooltip";
 import copy from "copy-to-clipboard";
 import io from "socket.io-client";
-import { useNavigate } from "react-router-dom";
+import { getUserNameInitials } from "../../helper";
 var socket;
 function NavbarComp(props) {
   const [userName, setUserName] = useState(null);
@@ -16,18 +16,12 @@ function NavbarComp(props) {
   const [isAdminUser, setAdminUserFlag] = useState(false);
   const [isBoardPage, setBoardPageFlag] = useState(false);
   const [boardId, setBoardId] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [showPointsFlag, setShowPointsFlag] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     setNavbarDetails();
-    if (!socket) {
-      socket = io(PokerService.getClientURL());
-      socket.emit("setup", boardId);
-      socket.on("connected", () => {
-        //console.log("Socket Connected");
-      });
-    }
   }, [location]);
 
   function setNavbarDetails() {
@@ -37,8 +31,16 @@ function NavbarComp(props) {
       setBoardPageFlag(true);
       var boardId = splittedPath[2];
       setBoardId(boardId);
+      if (!socket) {
+        socket = io(PokerService.getClientURL());
+        socket.emit("setup", boardId);
+        socket.on("connected", () => {
+          //console.log("Socket Connected");
+        });
+      }
       fetchBoardDetails(boardId);
       var userId = splittedPath[4];
+      setUserId(userId);
       PokerService.getUserByIdAndBoardId(userId, boardId).then(
         (user) => {
           setUserName(user.data.userName);
@@ -75,17 +77,17 @@ function NavbarComp(props) {
     );
   }
 
-  const getUserNameInitials = (userName) => {
-    const splittedUN = userName?.split(" ");
-    if (!splittedUN) return "??";
-    if (splittedUN?.length === 1 && splittedUN[0] === "") return "??";
-    if (splittedUN?.length === 1)
-      return Array.from(splittedUN[0])[0]?.toUpperCase();
-    return (
-      Array.from(splittedUN[0])[0]?.toUpperCase() +
-      Array.from(splittedUN[splittedUN.length - 1])[0]?.toUpperCase()
-    );
-  };
+  // const getUserNameInitials = (userName) => {
+  //   const splittedUN = userName?.split(" ");
+  //   if (!splittedUN) return "??";
+  //   if (splittedUN?.length === 1 && splittedUN[0] === "") return "??";
+  //   if (splittedUN?.length === 1)
+  //     return Array.from(splittedUN[0])[0]?.toUpperCase();
+  //   return (
+  //     Array.from(splittedUN[0])[0]?.toUpperCase() +
+  //     Array.from(splittedUN[splittedUN.length - 1])[0]?.toUpperCase()
+  //   );
+  // };
 
   function copyURL() {
     const url = window.location.href;
@@ -101,7 +103,7 @@ function NavbarComp(props) {
   function showPoints() {
     var spf = showPointsFlag ? false : true;
     //console.log("showPointsFlag =>", spf);
-    PokerService.showBoardPoints(boardId, spf)
+    PokerService.showBoardPoints(boardId, userId, spf)
       .then((res) => {
         // //console.log("res=>", res.data, "|| showPointsFlag=>", spf);
         setShowPointsFlag(res.data);
@@ -113,7 +115,7 @@ function NavbarComp(props) {
   }
 
   function clearBoardPoints() {
-    PokerService.clearUsersBoardPoint(boardId).then(
+    PokerService.clearUsersBoardPoint(boardId, userId).then(
       (res) => {
         socket.emit("refresh-board", boardId);
         //console.log("clear board points res =>", res);

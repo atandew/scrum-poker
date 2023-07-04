@@ -35,8 +35,10 @@ const PokerService = {
     return axios_api.get(`/user/board/${boardId}`);
   },
 
-  showBoardPoints: async function (boardId, showPoints) {
-    return axios_api.patch(`/board/${boardId}/show-point/${showPoints}`);
+  showBoardPoints: async function (boardId, userId, showPoints) {
+    const path = `/board/${boardId}/user/${userId}/show-point/${showPoints}`;
+    console.log("showBoardPoints path =>", path);
+    return axios_api.patch(path);
   },
 
   setBoardPoint: async function (userId, boardId, boardPoint) {
@@ -46,8 +48,8 @@ const PokerService = {
     return axios_api.patch(`/user/${userId}/board/${boardId}`, body);
   },
 
-  clearUsersBoardPoint: async function (boardId) {
-    return axios_api.patch(`/user/board/${boardId}/clear-points`);
+  clearUsersBoardPoint: async function (boardId, userId) {
+    return axios_api.patch(`/user/${userId}/board/${boardId}/clear-points`);
   },
 
   deleteUserById: async function (userId) {
@@ -56,6 +58,15 @@ const PokerService = {
 
   refreshBoard: async function (boardId) {
     return axios_api.get(`/board/${boardId}/refresh-board`);
+  },
+
+  getHistory: async function (boardId) {
+    return axios_api.get(`history/board/${boardId}`);
+  },
+
+  showHistory: async function (boardId, userId, showHistory) {
+    const path = `/board/${boardId}/user/${userId}/show-history/${showHistory}`;
+    return axios_api.patch(path);
   },
 };
 

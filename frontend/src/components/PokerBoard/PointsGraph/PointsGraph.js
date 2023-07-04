@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { DonutChartData } from "../../../models/DonutChartData";
 import "./PointsGraph.css";
+
 function PointsGraph(props) {
   const [donutChartData, setdonutChartData] = useState(new DonutChartData());
   const [showPoints, setshowPoints] = useState(false);

@@ -18,6 +18,10 @@ const boardSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    showHistory: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -1,15 +1,9 @@
 export class BoardDTO {
-  constructor(boardName, description, createdBy, showPoints) {
+  constructor(boardName, description, createdBy, showPoints, showHistory) {
     this.boardName = boardName;
     this.description = description;
     this.createdBy = createdBy;
     this.showPoints = showPoints;
+    this.showHistory = showHistory;
   }
 }
-
-// export class BoardParams {
-//   constructor(boardId, userId) {
-//     this.userId = userId;
-//     this.boardId = boardId;
-//   }
-// }

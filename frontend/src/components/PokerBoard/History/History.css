@@ -1,0 +1,32 @@
+.history-container{
+    height: 43vh;
+    overflow-y: auto;
+    margin: 1em 0 1em 0;
+}
+
+.history-container-hidden{
+    height: 43vh;
+    margin: 1em 0 1em 0;
+}
+
+.history-row div{
+    display: inline;
+}
+
+.history-row{
+    margin: 5px 0 5px 0
+}
+
+.history-user-initials{
+    background-color: rgb(83, 36, 224);
+    font-size: 15px;
+    width: 100px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    padding: 2px;
+    color: aliceblue;
+    margin-right: 20px;
+    border: 1px solid black;
+        
+}

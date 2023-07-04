@@ -6,15 +6,18 @@ const historySchema = mongoose.Schema(
       type: String,
       required: [true, "Board Id is required"],
     },
-    userId:{
-        type: String,
-        required: [true, "User id is required"],
+    userId: {
+      type: String,
+      required: [true, "User id is required"],
     },
-    action:{
-        type: String,
-        required: [true, "Action is required"]
-    }
-
+    action: {
+      type: String,
+      required: [true, "Action is required"],
+    },
+    actionType: {
+      type: Number,
+      required: [true, "Action type is required"],
+    },
   },
   { timestamps: true }
 );

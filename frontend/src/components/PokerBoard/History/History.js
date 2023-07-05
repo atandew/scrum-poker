@@ -1,18 +1,24 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef
+} from "react";
 import Button from "react-bootstrap/esm/Button";
 import PokerService from "../../../services/poker.service";
 import "./History.css";
 import { getUserNameInitials } from "../../../helper";
 import Hidden from "../../Hidden/Hidden";
+import { useStateWithCallbackLazy } from "use-state-with-callback";
 function History(props) {
-  const [histories, setHistories] = useState([]);
+  const [histories, setHistories] = useStateWithCallbackLazy([]);
   const [showHistoryFlag, setShowHistoryFlag] = useState(false);
   const divRef = useRef(null);
 
   useEffect(() => {
-    setHistories(props.histories);
+    setHistories(props.histories, () => {
+      scrolltoBottom();
+    });
     setShowHistoryFlag(props.board?.showHistory);
-    scrolltoBottom();
   }, [props.histories, props.board]);
 
   function showHistory() {

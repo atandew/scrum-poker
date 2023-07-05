@@ -13,7 +13,7 @@ const connection_URL = `mongodb+srv://admin:${password}@cluster0.lnf6t.mongodb.n
 
 //middleware
 app.use(express.json());
-app.use(Cors("*"));
+app.use(Cors());
 
 //routing
 const userRouter = require("./src/routes/user.js");
@@ -49,7 +49,7 @@ const server = app.listen(port, () => {
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: process.env.CLIENT_URL_DEV,
+    origin: process.env.CLIENT_URL_DEV_NETWORK,
     // credentials: true,
   },
 });

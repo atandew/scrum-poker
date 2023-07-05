@@ -3,7 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import PokerService from "../../../services/poker.service";
 import "./History.css";
 import { getUserNameInitials } from "../../../helper";
-
+import Hidden from "../../Hidden/Hidden";
 function History(props) {
   const [histories, setHistories] = useState([]);
   const [showHistoryFlag, setShowHistoryFlag] = useState(false);
@@ -12,7 +12,6 @@ function History(props) {
   useEffect(() => {
     setHistories(props.histories);
     setShowHistoryFlag(props.board?.showHistory);
-    console.log("histories =>", props.histories);
     scrolltoBottom();
   }, [props.histories, props.board]);
 
@@ -44,10 +43,20 @@ function History(props) {
     divRef?.current?.scrollIntoView({ behavior: "smooth" });
   }
 
-  function getUserName(userId) {
+  function getUserNameInitialsFromUserId(userId) {
     return getUserNameInitials(
       props.users.find((user) => user._id === userId).userName
     );
+  }
+
+  function getUserName(userId) {
+    return props.users.find((user) => user._id === userId).userName;
+  }
+
+  function getTimeString(time) {
+    const arr = time.split(":");
+    const AMPM = arr[2].split(" ")[1];
+    return arr[0] + ":" + arr[1] + " " + AMPM;
   }
 
   return (
@@ -60,20 +69,29 @@ function History(props) {
               return (
                 <div key={key + 999} className="history-row">
                   <div className="history-user-initials">
-                    {getUserName(history.userId)}
+                    {getUserNameInitialsFromUserId(history.userId)}
+                    <span className="tooltip-text">
+                      {getUserName(history.userId)}
+                    </span>
                   </div>
-                  <div>{history.action}</div>
+                  <div className="history-action">{history.action}</div>
                   <div className="history-timestamp">
-                    {new Date(history.createdAt).toLocaleTimeString()}
+                    <span>
+                      {getTimeString(
+                        new Date(history.createdAt).toLocaleTimeString()
+                      )}
+                    </span>
                   </div>
                 </div>
               );
             })}
-            <div />
-            <div ref={divRef} style={{ height: "20px" }}></div>
+            <div style={{ height: "20px" }} />
+            <div ref={divRef}></div>
           </div>
         ) : (
-          <div className="history-container-hidden"></div>
+          <div className="history-container-hidden">
+            <Hidden />
+          </div>
         )}
         {PokerService.isUserAdmin ? (
           <Button variant="outline-success" onClick={showHistory}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { DonutChartData } from "../../../models/DonutChartData";
 import "./PointsGraph.css";
+import Hidden from "../../Hidden/Hidden";
 
 function PointsGraph(props) {
   const [donutChartData, setdonutChartData] = useState(new DonutChartData());
@@ -107,7 +108,9 @@ function PointsGraph(props) {
             }}
           ></Chart>
         ) : (
-          <>Hidden</>
+          <div className="history-container-hidden">
+            <Hidden />
+          </div>
         )}
       </div>
     </div>

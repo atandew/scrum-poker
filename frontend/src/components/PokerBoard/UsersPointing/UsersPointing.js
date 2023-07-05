@@ -65,7 +65,12 @@ function UsersPointing(props) {
                     <BsTrash className="delete-icon" />
                   </div>
                 ) : (
-                  <div className="delete-icon-container"></div>
+                  <div
+                    className={
+                      "delete-icon-container" +
+                      (PokerService.isUserAdmin ? " w-2" : "")
+                    }
+                  ></div>
                 )}
               </div>
             );

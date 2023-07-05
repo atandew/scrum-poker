@@ -59,6 +59,7 @@ function PokerBoard(props) {
     PokerService.getBoardById(boardId).then(
       (res) => {
         setBoard(res.data);
+        PokerService.isUserAdmin = res.data.createdBy === userId;
         if (res.data?.showHistory) {
           fetchHistory();
         }

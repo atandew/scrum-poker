@@ -4,7 +4,7 @@ const PokerService = {
   isUserAdmin: false,
 
   getClientURL: function () {
-    return "http://localhost:8002";
+    return "http://192.168.29.240:8002";
   },
 
   createBoard: async function (board) {

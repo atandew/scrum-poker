@@ -5,6 +5,7 @@ import NavbarComp from "./components/NavbarComp/NavbarComp";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RegisterUser from "./components/RegisterUser/RegisterUser";
 import PokerBoard from "./components/PokerBoard/PokerBoard";
+import NotFound from "./components/NotFound/NotFound";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           element={<PokerBoard />}
         />
       </Routes>
+      <Route component={NotFound} />
     </Router>
   );
 }

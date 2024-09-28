@@ -23,8 +23,8 @@ function App() {
           path="/board/:boardId/user/:userId"
           element={<PokerBoard />}
         />
+        <Route component={NotFound} />
       </Routes>
-      <Route component={NotFound} />
     </Router>
   );
 }

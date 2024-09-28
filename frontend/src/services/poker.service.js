@@ -4,7 +4,7 @@ const PokerService = {
   isUserAdmin: false,
 
   getClientURL: function () {
-    return "https://scrum-poker-sd2v.onrender.com";
+    return "https://scrum-poker-backend-ov59.onrender.com";
     //return "http://192.168.1.6:8002";
   },
 
